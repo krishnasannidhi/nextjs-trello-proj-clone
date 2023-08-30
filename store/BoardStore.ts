@@ -1,5 +1,6 @@
 import { databases, storage } from "@/appwrite";
 import { getTodosGroupedByColumn } from "@/lib/getTodosGroupedByColumn";
+import { StringLiteral } from "typescript";
 import { create } from "zustand";
 
 interface BoardState {
@@ -10,11 +11,21 @@ interface BoardState {
   searchString: string;
   setSearchString: (searchString: string) => void;
   deleteTodo: (taskIndex: number, todo: Todo, id: TypedColumn) => void;
+  newTaskInput: string;
+  setNewTaskInput: (newTaskInput: string) => void;
+  newTaskType: TypedColumn;
+  setNewTaskType: (columnId: TypedColumn) => void;
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
+  newTaskType: "todo",
+
+  newTaskInput: "",
   searchString: "",
-  setSearchString: (searchString) => set({ searchString }),
+  setNewTaskInput: (newTaskInput: string) => set({ newTaskInput }),
+  setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
+
+  setSearchString: (searchString: string) => set({ searchString }),
   board: {
     columns: new Map<TypedColumn, Column>(),
   },
